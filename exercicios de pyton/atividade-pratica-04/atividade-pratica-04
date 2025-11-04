@@ -1,0 +1,110 @@
+# ============================
+# Atividade Prática 04 - Python
+# ============================
+
+# 1️⃣ Calculadora com tratamento de erros
+print("1 - Calculadora com tratamento de erros")
+
+while True:
+    try:
+        n1 = float(input("Digite o primeiro número: "))
+        n2 = float(input("Digite o segundo número: "))
+        operacao = input("Digite a operação (+, -, *, /): ")
+
+        if operacao == '+':
+            resultado = n1 + n2
+        elif operacao == '-':
+            resultado = n1 - n2
+        elif operacao == '*':
+            resultado = n1 * n2
+        elif operacao == '/':
+            if n2 == 0:
+                raise ZeroDivisionError("Divisão por zero não permitida.")
+            resultado = n1 / n2
+        else:
+            raise ValueError("Operação inválida. Use +, -, * ou /.")
+
+    except ValueError as e:
+        print(f"Erro: {e}. Tente novamente.\n")
+        continue
+    except ZeroDivisionError as e:
+        print(f"Erro: {e}\n")
+        continue
+    else:
+        print(f"Resultado: {resultado}")
+        break
+
+print("\n")
+
+# ------------------------------------------------------------
+
+# 2️⃣ Registro de notas e cálculo da média
+print("2 - Registro de notas da turma")
+
+notas = []
+while True:
+    entrada = input("Digite uma nota (ou 'fim' para encerrar): ").lower()
+    if entrada == 'fim':
+        break
+    try:
+        nota = float(entrada)
+        if 0 <= nota <= 10:
+            notas.append(nota)
+        else:
+            print("Nota inválida. Digite um valor entre 0 e 10.")
+    except ValueError:
+        print("Entrada inválida. Digite um número válido.")
+
+if notas:
+    media = sum(notas) / len(notas)
+    print(f"Média da turma: {media:.2f}")
+else:
+    print("Nenhuma nota válida foi registrada.")
+
+print("\n")
+
+# ------------------------------------------------------------
+
+# 3️⃣ Verificador de senha forte
+print("3 - Verificador de senha forte")
+
+while True:
+    senha = input("Digite uma senha (ou 'sair' para encerrar): ")
+    if senha.lower() == 'sair':
+        print("Encerrando verificação de senha.")
+        break
+    elif len(senha) < 8:
+        print("Senha fraca: precisa ter pelo menos 8 caracteres.")
+    elif not any(char.isdigit() for char in senha):
+        print("Senha fraca: precisa conter pelo menos um número.")
+    else:
+        print("Senha forte! ✅")
+        break
+
+print("\n")
+
+# ------------------------------------------------------------
+
+# 4️⃣ Verificador de números pares e ímpares
+print("4 - Verificador de números pares e ímpares")
+
+pares = 0
+impares = 0
+
+while True:
+    entrada = input("Digite um número inteiro (ou 'fim' para encerrar): ").lower()
+    if entrada == 'fim':
+        break
+    try:
+        numero = int(entrada)
+        if numero % 2 == 0:
+            print(f"{numero} é par.")
+            pares += 1
+        else:
+            print(f"{numero} é ímpar.")
+            impares += 1
+    except ValueError:
+        print("Erro: digite um número inteiro válido.")
+
+print(f"\nTotal de números pares: {pares}")
+print(f"Total de números ímpares: {impares}")
