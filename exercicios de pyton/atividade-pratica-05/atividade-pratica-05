@@ -1,0 +1,83 @@
+# aula09.py
+# Atividades da Aula 09 - Python
+
+from datetime import date
+
+# ---------- 1. Cálculo da Gorjeta ----------
+def calcular_gorjeta(valor_conta, porcentagem_gorjeta):
+    """Calcula o valor da gorjeta com base no total da conta e na porcentagem."""
+    gorjeta = valor_conta * (porcentagem_gorjeta / 100)
+    return gorjeta
+
+
+# ---------- 2. Verificar se é Palíndromo ----------
+def eh_palindromo(texto):
+    """Verifica se uma palavra ou frase é um palíndromo."""
+    texto = ''.join(c.lower() for c in texto if c.isalnum())  # remove espaços e pontuação
+    return texto == texto[::-1]
+
+
+# ---------- 3. Cálculo de Desconto ----------
+def calcular_preco_final(preco, desconto):
+    """Calcula o preço final de um produto após aplicar o desconto."""
+    valor_desconto = preco * (desconto / 100)
+    preco_final = preco - valor_desconto
+    return preco_final
+
+
+# ---------- 4. Cálculo da Idade em Dias ----------
+def calcular_idade_em_dias(ano_nascimento):
+    """Calcula a idade aproximada em dias com base no ano de nascimento."""
+    ano_atual = date.today().year
+    idade_anos = ano_atual - ano_nascimento
+    idade_dias = idade_anos * 365  # cálculo aproximado
+    return idade_dias
+
+
+# ---------- Menu Principal ----------
+def menu():
+    while True:
+        print("\n=== MENU - Atividades Aula 09 ===")
+        print("1 - Calcular Gorjeta")
+        print("2 - Verificar se é Palíndromo")
+        print("3 - Calcular Desconto de Produto")
+        print("4 - Calcular Idade em Dias")
+        print("0 - Sair")
+
+        opcao = input("Escolha uma opção: ")
+
+        if opcao == "1":
+            valor_conta = float(input("Digite o valor total da conta: R$ "))
+            porcentagem = float(input("Digite a porcentagem da gorjeta (%): "))
+            valor_gorjeta = calcular_gorjeta(valor_conta, porcentagem)
+            print(f"O valor da gorjeta é: R$ {valor_gorjeta:.2f}")
+
+        elif opcao == "2":
+            frase = input("Digite uma palavra ou frase: ")
+            if eh_palindromo(frase):
+                print("Sim, é um palíndromo!")
+            else:
+                print("Não, não é um palíndromo.")
+
+        elif opcao == "3":
+            preco = float(input("Digite o preço do produto: R$ "))
+            desconto = float(input("Digite o percentual de desconto (%): "))
+            preco_final = calcular_preco_final(preco, desconto)
+            print(f"O preço final do produto é: R$ {preco_final:.2f}")
+
+        elif opcao == "4":
+            ano = int(input("Digite o ano de nascimento: "))
+            dias = calcular_idade_em_dias(ano)
+            print(f"Sua idade aproximada em dias é: {dias} dias.")
+
+        elif opcao == "0":
+            print("Encerrando o programa. Até mais!")
+            break
+
+        else:
+            print("Opção inválida. Tente novamente.")
+
+
+# ---------- Execução ----------
+if __name__ == "__main__":
+    menu()

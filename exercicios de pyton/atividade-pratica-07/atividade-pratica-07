@@ -1,0 +1,134 @@
+# aula11.py
+# Atividades da Aula 11 - Python
+# Leitura e escrita de arquivos: TXT, CSV e JSON
+
+import csv
+import json
+import statistics
+
+# ---------- 1. Ler arquivo de log e calcular média e desvio padrão ----------
+def analisar_log():
+    """Lê um arquivo de log e calcula a média e o desvio padrão dos tempos de execução."""
+    nome_arquivo = input("Digite o nome do arquivo de log (ex: log.txt): ")
+
+    try:
+        with open(nome_arquivo, 'r') as arquivo:
+            tempos = []
+            for linha in arquivo:
+                linha = linha.strip()
+                if linha:
+                    try:
+                        tempo = float(linha)
+                        tempos.append(tempo)
+                    except ValueError:
+                        pass  # ignora linhas que não são números
+
+            if tempos:
+                media = statistics.mean(tempos)
+                desvio = statistics.stdev(tempos) if len(tempos) > 1 else 0
+                print("\n=== ANÁLISE DO LOG ===")
+                print(f"Média dos tempos: {media:.2f}")
+                print(f"Desvio padrão: {desvio:.2f}\n")
+            else:
+                print("Nenhum dado numérico encontrado no arquivo.")
+
+    except FileNotFoundError:
+        print("Arquivo não encontrado. Verifique o nome e tente novamente.\n")
+
+
+# ---------- 2. Escrever dados em arquivo CSV ----------
+def escrever_csv():
+    """Cria um arquivo CSV com informações pessoais."""
+    nome_arquivo = input("Digite o nome do arquivo CSV para criar (ex: pessoas.csv): ")
+
+    with open(nome_arquivo, 'w', newline='', encoding='utf-8') as arquivo_csv:
+        escritor = csv.writer(arquivo_csv)
+        escritor.writerow(['Nome', 'Idade', 'Cidade'])
+
+        while True:
+            nome = input("Nome: ")
+            idade = input("Idade: ")
+            cidade = input("Cidade: ")
+            escritor.writerow([nome, idade, cidade])
+
+            continuar = input("Deseja adicionar outra pessoa? (s/n): ").lower()
+            if continuar != 's':
+                break
+
+    print(f"\nArquivo '{nome_arquivo}' criado com sucesso!\n")
+
+
+# ---------- 3. Ler arquivo CSV ----------
+def ler_csv():
+    """Lê e exibe os dados de um arquivo CSV."""
+    nome_arquivo = input("Digite o nome do arquivo CSV para ler (ex: pessoas.csv): ")
+
+    try:
+        with open(nome_arquivo, 'r', encoding='utf-8') as arquivo_csv:
+            leitor = csv.reader(arquivo_csv)
+            cabecalho = next(leitor)
+            print("\n=== DADOS DO ARQUIVO CSV ===")
+            print(f"{' | '.join(cabecalho)}")
+            print("-" * 40)
+            for linha in leitor:
+                print(f"{' | '.join(linha)}")
+            print()
+    except FileNotFoundError:
+        print("Arquivo não encontrado.\n")
+
+
+# ---------- 4. Ler e escrever arquivo JSON ----------
+def manipular_json():
+    """Cria e lê um arquivo JSON com informações de uma pessoa."""
+    nome_arquivo = input("Digite o nome do arquivo JSON (ex: pessoa.json): ")
+
+    pessoa = {
+        "nome": input("Nome: "),
+        "idade": input("Idade: "),
+        "cidade": input("Cidade: ")
+    }
+
+    with open(nome_arquivo, 'w', encoding='utf-8') as arquivo_json:
+        json.dump(pessoa, arquivo_json, ensure_ascii=False, indent=4)
+
+    print(f"\nArquivo '{nome_arquivo}' criado com sucesso!\n")
+
+    # Leitura do arquivo
+    with open(nome_arquivo, 'r', encoding='utf-8') as arquivo_json:
+        dados = json.load(arquivo_json)
+        print("=== DADOS LIDOS DO ARQUIVO JSON ===")
+        print(f"Nome: {dados['nome']}")
+        print(f"Idade: {dados['idade']}")
+        print(f"Cidade: {dados['cidade']}\n")
+
+
+# ---------- Menu Principal ----------
+def menu():
+    while True:
+        print("\n=== MENU - Atividades Aula 11 ===")
+        print("1 - Analisar Log de Treinamento (Média e Desvio Padrão)")
+        print("2 - Escrever Dados em Arquivo CSV")
+        print("3 - Ler Arquivo CSV")
+        print("4 - Manipular Arquivo JSON (Ler e Escrever)")
+        print("0 - Sair")
+
+        opcao = input("Escolha uma opção: ")
+
+        if opcao == "1":
+            analisar_log()
+        elif opcao == "2":
+            escrever_csv()
+        elif opcao == "3":
+            ler_csv()
+        elif opcao == "4":
+            manipular_json()
+        elif opcao == "0":
+            print("Encerrando o programa. Até logo!")
+            break
+        else:
+            print("Opção inválida. Tente novamente.")
+
+
+# ---------- Execução ----------
+if __name__ == "__main__":
+    menu()

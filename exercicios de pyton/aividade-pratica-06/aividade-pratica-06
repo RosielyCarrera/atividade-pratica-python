@@ -1,0 +1,114 @@
+# aula10.py
+# Atividades da Aula 10 - Python
+# Uso de APIs e geração aleatória
+
+import random
+import string
+import requests
+
+# ---------- 1. Gerar Senha Aleatória ----------
+def gerar_senha():
+    """Gera uma senha aleatória com base na quantidade de caracteres informada pelo usuário."""
+    qtd = int(input("Digite a quantidade de caracteres da senha: "))
+    caracteres = string.ascii_letters + string.digits + string.punctuation
+    senha = ''.join(random.choice(caracteres) for _ in range(qtd))
+    print(f"\nSua senha aleatória é: {senha}\n")
+
+
+# ---------- 2. Gerar Perfil de Usuário Aleatório ----------
+def gerar_perfil_usuario():
+    """Gera um perfil de usuário aleatório usando a API Random User Generator."""
+    print("\nGerando perfil aleatório...\n")
+    url = "https://randomuser.me/api/"
+    resposta = requests.get(url)
+
+    if resposta.status_code == 200:
+        dados = resposta.json()
+        usuario = dados["results"][0]
+        nome = f"{usuario['name']['first']} {usuario['name']['last']}"
+        email = usuario["email"]
+        pais = usuario["location"]["country"]
+
+        print("=== PERFIL DE USUÁRIO GERADO ===")
+        print(f"Nome: {nome}")
+        print(f"E-mail: {email}")
+        print(f"País: {pais}\n")
+    else:
+        print("Erro ao gerar usuário. Tente novamente mais tarde.\n")
+
+
+# ---------- 3. Consultar Endereço por CEP ----------
+def consultar_cep():
+    """Consulta o endereço correspondente a um CEP usando a API ViaCEP."""
+    cep = input("Digite o CEP (somente números): ")
+    url = f"https://viacep.com.br/ws/{cep}/json/"
+    resposta = requests.get(url)
+
+    if resposta.status_code == 200:
+        dados = resposta.json()
+        if "erro" in dados:
+            print("CEP não encontrado.")
+        else:
+            print("\n=== INFORMAÇÕES DO ENDEREÇO ===")
+            print(f"Logradouro: {dados.get('logradouro', 'N/A')}")
+            print(f"Bairro: {dados.get('bairro', 'N/A')}")
+            print(f"Cidade: {dados.get('localidade', 'N/A')}")
+            print(f"Estado: {dados.get('uf', 'N/A')}\n")
+    else:
+        print("Erro ao consultar o CEP. Verifique sua conexão.\n")
+
+
+# ---------- 4. Consultar Cotação de Moeda ----------
+def consultar_cotacao():
+    """Consulta a cotação atual de uma moeda estrangeira em relação ao Real (BRL) usando a API AwesomeAPI."""
+    moeda = input("Digite o código da moeda (ex: USD, EUR, GBP): ").upper()
+    url = f"https://economia.awesomeapi.com.br/json/last/{moeda}-BRL"
+    resposta = requests.get(url)
+
+    if resposta.status_code == 200:
+        dados = resposta.json()
+        chave = f"{moeda}BRL"
+        if chave in dados:
+            cotacao = dados[chave]
+            print("\n=== COTAÇÃO ATUAL ===")
+            print(f"Moeda: {cotacao['code']} / {cotacao['codein']}")
+            print(f"Valor Atual: R$ {cotacao['bid']}")
+            print(f"Máximo do Dia: R$ {cotacao['high']}")
+            print(f"Mínimo do Dia: R$ {cotacao['low']}")
+            print(f"Data e Hora da Atualização: {cotacao['create_date']}\n")
+        else:
+            print("Moeda não encontrada.")
+    else:
+        print("Erro ao consultar a API. Verifique sua conexão.\n")
+
+
+# ---------- Menu Principal ----------
+def menu():
+    while True:
+        print("\n=== MENU - Atividades Aula 10 ===")
+        print("1 - Gerar Senha Aleatória")
+        print("2 - Gerar Perfil de Usuário Aleatório")
+        print("3 - Consultar Endereço por CEP")
+        print("4 - Consultar Cotação de Moeda Estrangeira")
+        print("0 - Sair")
+
+        opcao = input("Escolha uma opção: ")
+
+        if opcao == "1":
+            gerar_senha()
+        elif opcao == "2":
+            gerar_perfil_usuario()
+        elif opcao == "3":
+            consultar_cep()
+        elif opcao == "4":
+            consultar_cotacao()
+        elif opcao == "0":
+            print("Encerrando o programa. Até logo!")
+            break
+        else:
+            print("Opção inválida. Tente novamente.")
+
+
+# ---------- Execução ----------
+if __name__ == "__main__":
+    menu()
